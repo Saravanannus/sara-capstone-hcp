@@ -1,5 +1,6 @@
 locals {
-  prefix = "ce6-grp1-dev"  # Append environment to prefix
+  prefix = "ce6-grp1"  # Append environment to prefix
+  environment = "dev"
 }
 
 data "aws_caller_identity" "current" {}
@@ -17,16 +18,11 @@ data "aws_subnets" "public" {
   }
 }
 
-resource "aws_ecr_repository" "ecr" {
-  name         = "${local.prefix}-ecr"
-  force_delete = true
-}
-
 module "ecs" {
   source  = "terraform-aws-modules/ecs/aws"
   version = "~> 5.9.0"
 
-  cluster_name = "${local.prefix}-ecs"
+  cluster_name = "${local.prefix}-ecs-${local.environment}"
 
   fargate_capacity_providers = {
     FARGATE = {
@@ -65,7 +61,7 @@ module "ecs_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.1.0"
 
-  name        = "${local.prefix}-ecs-sg"
+  name        = "${local.prefix}-ecs-sg-${local.environment}"
   description = "Security group for ecs"
   vpc_id      = data.aws_vpc.default.id
 
