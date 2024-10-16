@@ -33,7 +33,7 @@ module "ecs" {
   }
 
   services = {
-    web = { #task def and service name -> #Change
+    web-dev = { #task def and service name -> #Change
       cpu    = 512
       memory = 1024
       # Container definition(s)
