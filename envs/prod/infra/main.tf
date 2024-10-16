@@ -37,12 +37,12 @@ module "ecs" {
   }
 
   services = {
-    web = { #task def and service name -> #Change
+    web-prod = { #task def and service name -> #Change
       cpu    = 512
       memory = 1024
       # Container definition(s)
       container_definitions = {
-        web-ecs-container = { #container name -> Change
+        web-prod-ecs-container = { #container name -> Change
           essential = true
           image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
           port_mappings = [
