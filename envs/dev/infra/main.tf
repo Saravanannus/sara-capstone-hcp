@@ -1,5 +1,5 @@
 locals {
-  prefix = "capstone-grp1"  # Append environment to prefix
+  prefix = "ce6-grp1-dev"  # Append environment to prefix
 }
 
 data "aws_caller_identity" "current" {}
@@ -37,12 +37,12 @@ module "ecs" {
   }
 
   services = {
-    capstone-grp1 = { #task def and service name -> #Change
+    web = { #task def and service name -> #Change
       cpu    = 512
       memory = 1024
       # Container definition(s)
       container_definitions = {
-        capstone-grp1-ecs-container = { #container name -> Change
+        web-ecs-container = { #container name -> Change
           essential = true
           image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
           port_mappings = [
