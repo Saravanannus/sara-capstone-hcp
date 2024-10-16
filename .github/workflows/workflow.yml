@@ -1,15 +1,23 @@
 name: Deploy to Amazon ECS
 
 on:
-  push:
-    branches:
-      - dev
-                                               
+  # push:
+  #   branches:
+  #     - dev
+  workflow_dispatch:
+    inputs:
+      env_name:
+        type: choice
+        description: environment to deploy
+        options: 
+        - dev
+        - prod                                               
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    # environment: ${{ github.ref_name }}
+    environment: ${{ inputs.env_name }}
 
     steps:
     - name: Checkout
@@ -47,9 +55,9 @@ jobs:
         docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }} -a
         echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
     
-    - name: Download task definition
-      run: |
-        aws ecs describe-task-definition --task-definition ${{ vars.TASK_DEF }} --query taskDefinition > task-definition.json
+    # - name: Download task definition
+    #   run: |
+    #     aws ecs describe-task-definition --task-definition ${{ vars.TASK_DEF }} --query taskDefinition > task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
