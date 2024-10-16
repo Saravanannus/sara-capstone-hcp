@@ -37,29 +37,29 @@ module "ecs" {
     }
   }
 
-  # services = {
-  #   web = { #task def and service name -> #Change
-  #     cpu    = 512
-  #     memory = 1024
-  #     # Container definition(s)
-  #     container_definitions = {
-  #       web-ecs-container = { #container name -> Change
-  #         essential = true
-  #         image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
-  #         port_mappings = [
-  #           {
-  #             containerPort = 8080
-  #             protocol      = "tcp"
-  #           }
-  #         ]
-  #       }
-  #     }
-  #     assign_public_ip                   = true
-  #     deployment_minimum_healthy_percent = 100
-  #     subnet_ids                         = flatten(data.aws_subnets.public.ids)
-  #     security_group_ids                 = [module.ecs_sg.security_group_id]
-  #   }
-  # }
+  services = {
+    web-prod = { #task def and service name -> #Change
+      cpu    = 512
+      memory = 1024
+      # Container definition(s)
+      container_definitions = {
+        web-ecs-container = { #container name -> Change
+          essential = true
+          image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/${local.prefix}-ecr:latest"
+          port_mappings = [
+            {
+              containerPort = 8080
+              protocol      = "tcp"
+            }
+          ]
+        }
+      }
+      assign_public_ip                   = true
+      deployment_minimum_healthy_percent = 100
+      subnet_ids                         = flatten(data.aws_subnets.public.ids)
+      security_group_ids                 = [module.ecs_sg.security_group_id]
+    }
+  }
 }
 
 module "ecs_sg" {
