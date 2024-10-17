@@ -3,7 +3,7 @@ name: Continious Deploy to Amazon ECS
 on:
   # push:
   #   branches:
-  #     - dev
+      - dev
   workflow_dispatch:
                                      
 jobs:
