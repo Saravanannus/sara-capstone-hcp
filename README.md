@@ -52,17 +52,18 @@ AWS hosts the deployed resources such as ECS, S3, and RDS for the DEV and PROD e
 
 ## Workflow Explanation
 
-**1.** Workflow Invocation:
+**1. Workflow Invocation:**
 
 - GitHub triggers the workflow on code commits or pull requests.
 
 - The workflow file defines the stages: build, test, plan, and deploy.
 
-**2.** DEV and PROD Environments:
+**2. DEV and PROD Environments:**
 
 - Separate workflows ensure that changes are validated in DEV before reaching PROD.
 
 - The **Terraform Cloud** plan is applied to the respective AWS environment after successful tests.
+
 
 ## Architecture Overview
 Here’s how the system works across different environments:
