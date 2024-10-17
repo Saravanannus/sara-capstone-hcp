@@ -5,7 +5,7 @@ on:
     inputs:
       env_name:
         type: choice
-        description: "Environment to deploy dev"
+        description: "Environment to deploy (dev)"
         options:
           - dev
           - prod
@@ -35,7 +35,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION_PROD }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -49,7 +49,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:latest .
           docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }} -a
-          echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_ENV
+          echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Upload image information as artifact
         uses: actions/upload-artifact@v3
@@ -76,7 +76,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          aws-region: ${{ vars.AWS_REGION_DEV }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Create new task definition for Dev
         id: task-def
@@ -113,7 +113,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION_PROD }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Create new task definition for Prod
         id: task-def
