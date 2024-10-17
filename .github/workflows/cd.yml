@@ -11,9 +11,7 @@ jobs:
     name: Build Image
     runs-on: ubuntu-latest
     environment: dev
-    
-    outputs:
-      image: ${{ steps.build-image.outputs.image }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -48,7 +46,13 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:latest .
         docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }} -a
-        echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+        echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> ./image-info.txt
+
+    - name: Upload image information as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: image-info
+        path: ./image-info.txt
 
   deploy-dev:
     name: Deploy to dev
@@ -57,10 +61,30 @@ jobs:
     environment: dev
 
     steps:
-    
-    - name: verify
+    - name: Download image information artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: image-info
+        path: ./
+
+    - name: Output image url
       run: |
-        echo "value ${{ needs.build-image.outputs.image }}"
+        cat ./image-info.txt >> $GITHUB_ENV
+
+    - name: Verify image url
+      run: |
+        echo 'image=${{ env.image }}'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition web-dev --query taskDefinition > task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -68,7 +92,7 @@ jobs:
       with:
         task-definition: task-definition.json
         container-name: ${{ env.CONTAINER_NAME }}  # Updated to use env
-        image: ${{ needs.build-image.outputs.image }}
+        image: ${{ env.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -85,13 +109,38 @@ jobs:
     needs: [build-image, deploy-dev]
 
     steps:
+    - name: Download image information artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: image-info
+        path: ./
+
+    - name: Output image url
+      run: |
+        cat ./image-info.txt >> $GITHUB_ENV
+
+    - name: Verify image url
+      run: |
+        echo 'image=${{ env.image }}'
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ vars.AWS_REGION }}
+
+    - name: Download task definition
+      run: |
+        aws ecs describe-task-definition --task-definition web-prod --query taskDefinition > task-definition.json
+
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
         container-name: ${{ env.CONTAINER_NAME }}  # Updated to use env
-        image: ${{ needs.build-image.outputs.image }}
+        image: ${{ env.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
