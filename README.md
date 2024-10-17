@@ -79,11 +79,13 @@ AWS hosts the deployed resources such as ECR,ECS &Fargate,etc.. for the DEV and 
 
 **2. Configure GitHub Secrets:**
 
-- Store AWS credentials and Terraform API tokens in GitHub Secrets.
+- Store AWS credentials in GitHub Secrets and variables stored in github enviorments.
 
 **3. Triggering Workflows:**
 
 - Push code to the dev branch to trigger the DEV workflow.
+
+- Test -> Build -> deploy to dev -> After Approval -> deploy to prod
 
 - Merge to main to trigger the PROD workflow.
 
@@ -92,7 +94,9 @@ Here’s how the system works across different environments:
 
 #### 1. GitHub Actions Workflow:
 
-Developers push code changes to the repository on dev, stage, or prod branches.
+- Developers push code changes to the repository on dev branches.
+
+- After approval Production team to push code changes to the repository on prod branches.
 
 #### 2. Docker Image Build and Push:
 
@@ -100,7 +104,7 @@ The CI/CD pipeline builds a Docker image from the code and pushes it to AWS ECR.
 
 #### 3. ECS Cluster Deployment: ####
 
-ECS clusters (dev-cluster, stage-cluster, and prod-cluster) are configured with services and containers running on Fargate.
+ECS clusters (dev-cluster) are configured with services and containers running on Fargate.
 
 #### 4. Networking and Security:
 
@@ -127,15 +131,13 @@ The security group allows HTTP traffic on port 8080 to access the running contai
 
 - Stores Docker images, tagged with versions like latest or commit SHA (:abc123).
 
-- GitHub Actions authenticates and pushes images to specific repositories (dev, stage, prod).
+- GitHub Actions authenticates and pushes images to specific repositories (dev or prod).
 
-#### 3.AWS ECS Clusters (Dev, Stage, Prod)
+#### 3.AWS ECS Clusters (Dev or Prod)
 
-**Three Clusters:**
+**Two Clusters:**
 
 - dev-cluster: Used for development and early testing.
-
-- stage-cluster: Pre-production for validation.
 
 - prod-cluster: The live environment for end-users.
 
@@ -153,7 +155,7 @@ Each service is exposed on **port 8080.**
 
 #### 6. Deployment Flow
 
-**Push to GitHub → Build Image → Push to ECR → Deploy to ECS (Dev/Stage/Prod)**
+**Push to GitHub → Build Image → Push to ECR → Deploy to ECS (Dev or Prod)**
 
 ## **Deployment Process:**
 
