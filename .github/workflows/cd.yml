@@ -3,6 +3,9 @@ name: Continuous Deploy to Amazon ECS
 on:
   workflow_dispatch:
 
+vars:
+  CONTAINER_NAME: my-container-name  # Replace with your actual container name
+
 jobs:
   deploy-dev:
     name: Deploy dev
@@ -67,14 +70,12 @@ jobs:
     - name: Verify artifact contents
       run: cat ./image-info.txt
 
-# This will download the image-info.txt artifact
-
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: ${{ vars.CONTAINER_NAME }}
+        container-name: ${{ vars.CONTAINER_NAME }}  # Reference the new 'vars' section value
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
@@ -84,7 +85,7 @@ jobs:
         service: ${{ vars.ECS_SERVICE }}
         cluster: ${{ vars.ECS_CLUSTER }}
         wait-for-service-stability: true
-        
+
   deploy-prod:
     name: Deploy prod
     runs-on: ubuntu-latest
@@ -107,6 +108,7 @@ jobs:
         service: ${{ vars.ECS_SERVICE }}
         cluster: ${{ vars.ECS_CLUSTER }}
         wait-for-service-stability: true
+
 
 # name: Continious Deploy to Amazon ECS
 
