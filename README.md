@@ -12,8 +12,6 @@ This is a sample application used to demonstrate a POC of using GitHub Actions t
 
 ![image](https://github.com/user-attachments/assets/ac446041-38a4-4615-a08f-5942960dacdc)
 
-![alt text](image-2.png)
-
 ![alt text](image.png)
 
 
