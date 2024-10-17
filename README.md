@@ -17,6 +17,8 @@ This project automates deployments using GitHub Actions and Terraform. The pipel
 
 ![alt text](image-3.png)
 
+![alt text](image-5.png) 
+
 ## List of AWS Resources used in this Project: ##
 
 **1. GitHub Actions** – Automates the CI/CD pipeline.
