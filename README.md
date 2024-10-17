@@ -14,6 +14,7 @@ This is a sample application used to demonstrate a POC of using GitHub Actions t
 
 ![alt text](image.png)
 
+![alt text](image-3.png)
 
 ## List of AWS Resources used in this Project: ##
 
