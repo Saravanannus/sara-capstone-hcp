@@ -5,7 +5,7 @@ on:
     inputs:
       env_name:
         type: choice
-        description: "Environment to deploy (dev)"
+        description: "Environment to deploy (dev or prod)"
         options:
           - dev
           - prod
