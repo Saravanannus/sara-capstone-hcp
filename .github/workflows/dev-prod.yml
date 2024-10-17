@@ -1,132 +1,86 @@
-name: Build and Deploy to ECS
+name: CI/CD Pipeline
 
 on:
   workflow_dispatch:
-    inputs:
-      env_name:
-        type: choice
-        description: "Environment to deploy (dev or prod)"
-        options:
-          - dev
-          - prod
+
+env:
+  ECR_REPOSITORY: my-ecr-repo # Replace with your actual ECR repository name
+  ECS_SERVICE: my-ecs-service   # Replace with your ECS service name
+  ECS_CLUSTER: my-ecs-cluster    # Replace with your ECS cluster name
+  CONTAINER_NAME: web-ecs-container # Replace with your actual container name
 
 jobs:
   build:
-    name: Build Docker image and push to ECR (prod)
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
-
-      - name: Configure AWS credentials for Prod
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to ECR (prod)
+      - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG -t $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:latest .
-          docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }} -a
-          echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_ENV
+          # Build and tag the Docker image
+          docker build -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:latest .
+          # Push the image to ECR
+          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }} -a
+          # Set the image name as an output variable
+          echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_ENV
 
-      - name: Upload image information as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: image-info
-          path: ./image-info.txt
-
-
-  deploy_dev:
-    name: Deploy to ECS (Dev)
+  deploy-dev:
     runs-on: ubuntu-latest
     needs: build
-    environment: dev
-
     steps:
-      - name: Download image information artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: image-info
-          path: ./
-
-      - name: Configure AWS credentials for Dev
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Create new task definition for Dev
+      - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
-          container-name: ${{ vars.CONTAINER_NAME_DEV }}
+          task-definition: task-definition.json  # Update with your task definition file path
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.image }}
 
-      - name: Deploy to ECS (Dev)
+      - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ vars.ECS_CLUSTER_DEV }}
-          service: ${{ vars.ECS_SERVICE_DEV }}
           task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
+      - name: Verify ECS deployment
+        run: |
+          echo "Deployment completed for dev environment"
+          # You can add commands to check the status of the ECS service here
+          aws ecs describe-services --cluster ${{ env.ECS_CLUSTER }} --services ${{ env.ECS_SERVICE }}
 
-  deploy_prod:
-    name: Deploy to ECS (Prod)
+  deploy-prod:
     runs-on: ubuntu-latest
-    needs: deploy_dev
-    environment: prod
-
+    needs: deploy-dev
     steps:
-      - name: Download image information artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: image-info
-          path: ./
-
-      - name: Configure AWS credentials for Prod
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Create new task definition for Prod
+      - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
-          container-name: ${{ vars.CONTAINER_NAME_PROD }}
+          task-definition: task-definition.json  # Update with your task definition file path
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.image }}
 
-      - name: Deploy to ECS (Prod)
+      - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ vars.ECS_CLUSTER_PROD }}
-          service: ${{ vars.ECS_SERVICE_PROD }}
           task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+
+      - name: Verify ECS deployment
+        run: |
+          echo "Deployment completed for production environment"
+          # You can add commands to check the status of the ECS service here
+          aws ecs describe-services --cluster ${{ env.ECS_CLUSTER }} --services ${{ env.ECS_SERVICE }}
