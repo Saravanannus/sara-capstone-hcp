@@ -75,7 +75,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: ${{ vars.CONTAINER_NAME }}  # Reference the new 'vars' section value
+        container-name: ${{ env.CONTAINER_NAME }}  # Updated to use env
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
@@ -98,7 +98,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: ${{ vars.CONTAINER_NAME }}
+        container-name: ${{ env.CONTAINER_NAME }}  # Updated to use env
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
