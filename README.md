@@ -64,6 +64,26 @@ AWS hosts the deployed resources such as ECS, S3, and RDS for the DEV and PROD e
 
 - The **Terraform Cloud** plan is applied to the respective AWS environment after successful tests.
 
+## Folder Structure
+
+![alt text](image-4.png)
+
+## Usage Instructions
+
+**1. Setup Terraform Cloud:**
+
+- Link Terraform Cloud with your repository.
+- Define workspaces for dev and prod.
+
+**2. Configure GitHub Secrets:**
+
+- Store AWS credentials and Terraform API tokens in GitHub Secrets.
+
+**3. Triggering Workflows:**
+
+- Push code to the dev branch to trigger the DEV workflow.
+
+- Merge to main to trigger the PROD workflow.
 
 ## Architecture Overview
 Here’s how the system works across different environments:
@@ -100,6 +120,7 @@ The security group allows HTTP traffic on port 8080 to access the running contai
 - Updates ECS task definitions with the new image.
 
 - Deploys to ECS clusters for the appropriate environment.
+
 #### 2. AWS ECR (Elastic Container Registry)
 
 - Stores Docker images, tagged with versions like latest or commit SHA (:abc123).
