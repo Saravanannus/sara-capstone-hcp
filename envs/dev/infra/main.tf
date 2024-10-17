@@ -63,7 +63,7 @@ module "ecs_sg" {
   version = "~> 5.1.0"
 
   name        = "${local.prefix}-ecs-sg-${local.environment}"
-  description = "Security group for ecs "
+  description = "Security group for ecs (dev)"
   vpc_id      = data.aws_vpc.default.id
 
   ingress_cidr_blocks = ["0.0.0.0/0"]
