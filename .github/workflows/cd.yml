@@ -3,7 +3,7 @@ name: Continuous Deploy to Amazon ECS
 on:
   workflow_dispatch:
 
-vars:
+ vars:
   CONTAINER_NAME: web-ecs-container  # Replace with your actual container name
 
 jobs:
