@@ -1,6 +1,7 @@
-# ce6-capstone-grp1
-#### Introduction
-This is a sample application used to demonstrate a POC of using GitHub Actions to deploy to AWS ECR and Fargate.
+# ce6-Capstone-Project-grp1 : CI/CD with GitHub Actions, Terraform, and AWS
+
+## Overview
+This project automates deployments using GitHub Actions and Terraform. The pipeline manages both DEV and PROD environments hosted on AWS, with infrastructure configurations stored in Terraform Cloud.
 
 ## The Team Consist of:
 - Jyoti Rani
@@ -31,6 +32,37 @@ This is a sample application used to demonstrate a POC of using GitHub Actions t
 **6. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
 
 **7. IAM Roles and Policies** – Manages access to AWS resources from ECS and GitHub Actions.
+
+### Architecture
+
+**1.** Source Code Management:
+GitHub hosts the code and triggers workflows on specific events like pull requests or merges.
+
+**2.** CI/CD Workflow:
+GitHub Actions handles the CI/CD process with distinct workflows for:
+
+- **Development (DEV)** environment
+- **Production (PROD)** environment
+
+**3.** Infrastructure as Code (IaC):
+Terraform Cloud manages the infrastructure definitions for both environments.
+
+**4.** Cloud Provider:
+AWS hosts the deployed resources such as ECS, S3, and RDS for the DEV and PROD environments.
+
+## Workflow Explanation
+
+**1.** Workflow Invocation:
+
+- GitHub triggers the workflow on code commits or pull requests.
+
+- The workflow file defines the stages: build, test, plan, and deploy.
+
+**2.** DEV and PROD Environments:
+
+- Separate workflows ensure that changes are validated in DEV before reaching PROD.
+
+- The **Terraform Cloud** plan is applied to the respective AWS environment after successful tests.
 
 ## Architecture Overview
 Here’s how the system works across different environments:
