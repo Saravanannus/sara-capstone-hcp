@@ -29,7 +29,7 @@ This project automates deployments using GitHub Actions and Terraform. The pipel
 
 **4. Security Group** – Manages network access, allowing HTTP traffic on port 8080.
 
-**5. Amazon S3** – Stores Terraform state files.
+# **5. Amazon S3** – Stores Terraform state files.
 
 **6. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
 
@@ -50,7 +50,7 @@ GitHub Actions handles the CI/CD process with distinct workflows for:
 Terraform Cloud manages the infrastructure definitions for both environments.
 
 **4.** Cloud Provider:
-AWS hosts the deployed resources such as ECS, S3, and RDS for the DEV and PROD environments.
+AWS hosts the deployed resources such as ECR,ECS &Fargate,etc.. for the DEV and PROD environments.
 
 ## Workflow Explanation
 
