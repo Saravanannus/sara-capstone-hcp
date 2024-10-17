@@ -211,11 +211,11 @@ The project uses Terraform to create and manage the AWS resources, including ECS
 
 To initialize and provision the infrastructure by running below code:
 
-cd terraform
+cd envs/dev/infa
 
 terraform init
 
-terraform apply
+terraform plan
 
 The Terraform script will:
 
