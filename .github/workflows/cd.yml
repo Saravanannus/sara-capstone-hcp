@@ -48,6 +48,27 @@ jobs:
         docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY }} -a
         echo "image=$ECR_REGISTRY/${{ vars.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
     
+    - name: Upload image information as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: image-info
+        path: ./image-info.txt
+
+  deploy:
+    name: Deploy to ECS
+    runs-on: ubuntu-latest
+    needs: build  # This ensures the deploy job waits for build job to complete
+    environment: ${{ inputs.env_name }}
+
+    steps:
+      
+    - name: Download image information artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: image-info
+        path: ./ 
+        
+        # This will download the image-info.txt artifact
     #  - name: Fill in the new image ID in the Amazon ECS task definition
     #   id: task-def
     #   uses: aws-actions/amazon-ecs-render-task-definition@v1
