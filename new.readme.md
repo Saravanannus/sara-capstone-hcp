@@ -31,40 +31,8 @@
 <h3>Architecture Diagram</h3>
 <p>The architecture diagram below depicts the project's structure and interactions between components:</p>
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/12c02ab1-08eb-4c0a-8873-789894ac8fed)
 
-<pre>
-+-------------------------------------+
-|          GitHub Repository          |
-|    +---------------------------+    |
-|    |    Branching Strategies    |    |
-|    |      (Main/Feature)        |    |
-|    +---------------------------+    |
-|                  |                  |
-|                  v                  |
-|    +---------------------------+    |
-|    |     GitHub Actions CI/CD   |    |
-|    |   (Continuous Deployment)  |    |
-|    +---------------------------+    |
-|                  |                  |
-|                  v                  |
-|    +---------------------------+    |
-|    |   Amazon ECR (Docker Images)    |
-|    +---------------------------+    |
-|                  |                  |
-|                  v                  |
-|    +---------------------------+    |
-|      Amazon ECS (Fargate)            |
-|    +---------------------------+    |
-|    |    Running Application    |    |
-|    +---------------------------+    |
-|                  |                  |
-|                  v                  |
-|    +---------------------------+    |
-|       Monitoring & Logging      |    |
-|    +---------------------------+    |
-+-------------------------------------+
-</pre>
 <p>The architecture consists of a Node.js application running in Docker containers on Amazon ECS, with a CI/CD pipeline configured through GitHub Actions.</p>
 
 <hr>
