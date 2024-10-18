@@ -241,6 +241,7 @@ Security Groups: Allow inbound HTTP traffic on port 8080 and permit all outbound
     <li>Security Groups</li>
 </ul>
 Outputs:
+<img width="465" alt="image" src="https://github.com/user-attachments/assets/0f3f5d5b-e753-451b-b57f-1a184e06043c">
 
 <img width="464" alt="image" src="https://github.com/user-attachments/assets/4b9f7088-7db0-4b08-975b-4520a2611756">
 
