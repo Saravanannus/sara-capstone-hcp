@@ -13,11 +13,6 @@ This project automates deployments using GitHub Actions and Terraform. The pipel
 
 ![image](https://github.com/user-attachments/assets/ac446041-38a4-4615-a08f-5942960dacdc)
 
-![alt text](image.png)
-
-![alt text](image-3.png)
-
-![alt text](image-5.png) 
 
 ## List of AWS Resources used in this Project: ##
 
