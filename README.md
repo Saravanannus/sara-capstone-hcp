@@ -1,33 +1,5 @@
-## Usage Instructions
-
-**1. Setup Terraform Cloud:**
-
-- Link Terraform Cloud with your repository.
-- Define workspaces for dev and prod.
-
-
-**3. Triggering Workflows:**
-
-- Push code to the dev branch to trigger the DEV workflow.
-
-- Test -> Build -> deploy to dev -> After Approval -> deploy to prod
-
-- Merge to main to trigger the PROD workflow.
-
-
-#### 4. Networking and Security:
-
-Each ECS cluster is deployed within a VPC using public subnets and security groups.
-The security group allows HTTP traffic on port 8080 to access the running containers.
 
 ### Architecture Flow for ECS with GitHub Actions CI/CD
-
-
-#### 2. AWS ECR (Elastic Container Registry)
-
-- Stores Docker images, tagged with versions like latest or commit SHA (:abc123).
-
-- GitHub Actions authenticates and pushes images to specific repositories (dev or prod).
 
 
 #### 4. AWS Fargate Tasks & Services
