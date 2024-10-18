@@ -1,17 +1,4 @@
-# ce6-Capstone-Project-grp1 : CI/CD with GitHub Actions, Terraform, and AWS
 
-## Overview
-This project automates deployments using GitHub Actions and Terraform. The pipeline manages both DEV and PROD environments hosted on AWS, with infrastructure configurations stored in Terraform Cloud.
-
-## The Team Consist of:
-- Jyoti Rani
-- Kerenp
-- Saravanan.B
-- Vedrethinam Vennila
-
-# Architecture Diagram
-
-![image](https://github.com/user-attachments/assets/ac446041-38a4-4615-a08f-5942960dacdc)
 
 
 ## List of AWS Resources used in this Project: ##
@@ -24,7 +11,6 @@ This project automates deployments using GitHub Actions and Terraform. The pipel
 
 **4. Security Group** – Manages network access, allowing HTTP traffic on port 8080.
 
-# **5. Amazon S3** – Stores Terraform state files.
 
 **6. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
 
@@ -63,7 +49,6 @@ AWS hosts the deployed resources such as ECR,ECS &Fargate,etc.. for the DEV and 
 
 ## Folder Structure
 
-![alt text](image-4.png)
 
 ## Usage Instructions
 
@@ -72,9 +57,6 @@ AWS hosts the deployed resources such as ECR,ECS &Fargate,etc.. for the DEV and 
 - Link Terraform Cloud with your repository.
 - Define workspaces for dev and prod.
 
-**2. Configure GitHub Secrets:**
-
-- Store AWS credentials in GitHub Secrets and variables stored in github enviorments.
 
 **3. Triggering Workflows:**
 
@@ -84,22 +66,6 @@ AWS hosts the deployed resources such as ECR,ECS &Fargate,etc.. for the DEV and 
 
 - Merge to main to trigger the PROD workflow.
 
-## Architecture Overview
-Here’s how the system works across different environments:
-
-#### 1. GitHub Actions Workflow:
-
-- Developers push code changes to the repository on dev branches.
-
-- After approval Production team to push code changes to the repository on prod branches.
-
-#### 2. Docker Image Build and Push:
-
-The CI/CD pipeline builds a Docker image from the code and pushes it to AWS ECR.
-
-#### 3. ECS Cluster Deployment: ####
-
-ECS clusters (dev-cluster) are configured with services and containers running on Fargate.
 
 #### 4. Networking and Security:
 
@@ -108,19 +74,6 @@ The security group allows HTTP traffic on port 8080 to access the running contai
 
 ### Architecture Flow for ECS with GitHub Actions CI/CD
 
-#### 1. GitHub Actions (CI/CD Pipeline)
-
-**Input:** Developers push code to different branches (dev, stage, prod).
-
-**Action:**
-
-- Builds Docker images.
-
-- Pushes these images to AWS ECR (Elastic Container Registry).
-
-- Updates ECS task definitions with the new image.
-
-- Deploys to ECS clusters for the appropriate environment.
 
 #### 2. AWS ECR (Elastic Container Registry)
 
@@ -128,13 +81,6 @@ The security group allows HTTP traffic on port 8080 to access the running contai
 
 - GitHub Actions authenticates and pushes images to specific repositories (dev or prod).
 
-#### 3.AWS ECS Clusters (Dev or Prod)
-
-**Two Clusters:**
-
-- dev-cluster: Used for development and early testing.
-
-- prod-cluster: The live environment for end-users.
 
 #### 4. AWS Fargate Tasks & Services
 
@@ -152,17 +98,6 @@ Each service is exposed on **port 8080.**
 
 **Push to GitHub → Build Image → Push to ECR → Deploy to ECS (Dev or Prod)**
 
-## **Deployment Process:**
-
-This project is a Node.js web application containerized with Docker and deployed on AWS Elastic Container Service (ECS) using Fargate. The infrastructure and service deployment are managed with Terraform, while the CI/CD pipeline is set up using GitHub Actions to automate the build and deployment process.
-
-### Prerequisites :
- - Before you begin the deployment, ensure the following are set up:
-
-**AWS Account:** 
-  
-- You’ll need an AWS account with permissions to create ECS clusters, services, task definitions, and ECR (Elastic Container Registry) repositories.
-
 **Terraform Installed:** 
 
 - Ensure Terraform is installed on your local machine for infrastructure provisioning.
@@ -170,17 +105,6 @@ This project is a Node.js web application containerized with Docker and deployed
 **AWS CLI:**
 
 - Install the AWS CLI for managing AWS resources.
-
-**GitHub Secrets:** 
-
-- Set up the following GitHub secrets in your repository for authentication and deployments:
-
-AWS_ACCESS_KEY_ID
-
-AWS_SECRET_ACCESS_KEY
-
-AWS_REGION
-ECR_REPOSITORY_URI (URI of your ECR repository)
 
 **Deployment Steps:**
 
@@ -201,44 +125,6 @@ docker run -p 8080:8080 your-application-name
 
 This will expose the application on http://localhost:8080.
 
-**3.** Infrastructure Provisioning with Terraform
-The project uses Terraform to create and manage the AWS resources, including ECS, ECR, and networking components.
-
-To initialize and provision the infrastructure by running below code:
-
-cd envs/dev/infa
-
-terraform init
-
-terraform plan
-
-The Terraform script will:
-
-Set up an ECS Cluster.
-Create an ECS Service that runs your Docker container.
-Manage networking configurations like Security Groups and Ingress/Egress rules.
-Once the Terraform provisioning is complete, your ECS environment is ready to deploy the application.
-
-**4.** Continuous Integration & Deployment with GitHub Actions
-The project uses GitHub Actions for CI/CD, automatically building the Docker image, pushing it to ECR, and updating the ECS service.
-
-The workflow is defined in .github/workflows/dev.yml and it performs the following steps:
-
-- Build Docker Image:
-
-    The workflow builds the Docker image for the application based on the Dockerfile.
-- Push to ECR:
-
-    Once the image is built, it is pushed to the AWS Elastic Container Registry (ECR).
-- Update ECS Task Definition:
-
-    After pushing the image to ECR, the ECS task definition is updated with the new image version.
-
-- Deploy to ECS:
-
-    The ECS service is updated to use the latest task definition, and the new container is deployed to Fargate.
-
-    You can trigger the GitHub Actions workflow by pushing changes to the main branch. The pipeline will automatically handle the deployment.
 
 **5.** Health Check & Monitoring
 We recommend adding a health check endpoint (e.g., /health) to your application so ECS can verify the status of your service. 
