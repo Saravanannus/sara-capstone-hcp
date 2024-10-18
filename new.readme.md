@@ -30,7 +30,9 @@
 
 <h3>Architecture Diagram</h3>
 <p>The architecture diagram below depicts the project's structure and interactions between components:</p>
+
 ![alt text](image.png)
+
 <pre>
 +-------------------------------------+
 |          GitHub Repository          |
@@ -69,6 +71,11 @@
 
 <h3>Getting Started</h3>
 <h4>Tools and Technologies Used:</h4>
+
+##Setup Terraform Cloud: ##
+- Link Terraform Cloud with your repository.
+- Define workspaces for dev and prod.
+
 ## List of AWS Resources used in this Project: ##
 
 **1. GitHub Actions** – Automates the CI/CD pipeline for building, testing, and deploying the application.
@@ -82,10 +89,10 @@ Terraform Cloud manages the infrastructure definitions for both environments.
 
 **5. Amazon ECS Fargate** – Runs containerized services without managing infrastructure.
 
-**6. Security Group** – Manages network access, allowing HTTP traffic on port 8080.
+**6. Networking and Security** – Each ECS cluster is deployed within a VPC using public subnets and security groups. 
+The security group allows HTTP traffic on port 8080 to access the running containers.
 
 **7. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
-
 
 <h4>Dependencies:</h4>
 <ul>
@@ -206,7 +213,11 @@ console.log(`Running on http://${HOST}:${PORT}`);
 <h4>1. GitHub Actions Workflow for Continuous Deployment</h4>
 <p>This workflow automates building, testing, and deploying a Dockerized application to Amazon ECS. It consists of two main jobs: one for building the Docker image and pushing it to Amazon ECR, and the other for deploying the application to the ECS cluster in both development and production environments.</p>
 
-<h4>Continuous-Deploy.yml Workflow File</h4>
+<h4>AWS ECR (Elastic Container Registry):</h4>
+<p>Purpose: Stores Docker images that are tagged with version identifiers such as latest or specific commit SHAs (e.g., :abc123).</p>
+<p>Integration: GitHub Actions authenticates with ECR and pushes images to designated repositories based on the environment (dev or prod).</p>
+
+<h4>ci-cd.yml Workflow File</h4>
 <p><strong>Trigger:</strong> The workflow is triggered manually (<code>workflow_dispatch</code>), allowing for on-demand deployments.</p>
 <p><strong>Environment Variables:</strong> Set for easier reuse of names and identifiers like container names, regions, and repository names.</p>
 
