@@ -40,27 +40,24 @@
 <h3>Getting Started</h3>
 <h4>Tools and Technologies Used:</h4>
 
-##Setup Terraform Cloud: ##
-- Link Terraform Cloud with your repository.
-- Define workspaces for dev and prod.
+<h5>Setup Terraform Cloud:</h5>
+<ul>
+    <li>Link Terraform Cloud with your repository.</li>
+    <li>Define workspaces for dev and prod.</li>
+</ul>
 
-## List of AWS Resources used in this Project: ##
-
-**1. GitHub Actions** – Automates the CI/CD pipeline for building, testing, and deploying the application.
-
-**2. IAM Roles and Policies** – Manages access and permissions for AWS resources between ECS and GitHub Actions, ensuring secure access.
-
-**3.** Infrastructure as Code (IaC):
-Terraform Cloud manages the infrastructure definitions for both environments.
-
-**4. Amazon ECR** – Stores Docker images for different environments (dev, prod).
-
-**5. Amazon ECS Fargate** – Runs containerized services without managing infrastructure.
-
-**6. Networking and Security** – Each ECS cluster is deployed within a VPC using public subnets and security groups. 
-The security group allows HTTP traffic on port 8080 to access the running containers.
-
-**7. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
+<h5>List of AWS Resources used in this Project:</h5>
+<ul>
+    <li><strong>GitHub Actions</strong> – Automates the CI/CD pipeline for building, testing, and deploying the application.
+    <li><strong>IAM Roles and Policies</strong> – Manages access and permissions for AWS resources between ECS and GitHub Actions, ensuring secure access.
+    <li><strong>Infrastructure as Code (IaC)</strong> – 
+    Terraform Cloud manages the infrastructure definitions for both environments.
+    <li><strong>Amazon ECR</strong> – Stores Docker images for different environments (dev, prod).
+    <li><strong>Amazon ECS Fargate</strong> – Runs containerized services without managing infrastructure.
+    <li><strong>Networking and Security</strong> – Each ECS cluster is deployed within a VPC using public subnets and security groups. 
+    The security group allows HTTP traffic on port 8080 to access the running containers.
+    <li><strong>VPC and Public Subnets</strong> – Provides networking and connectivity for the ECS tasks.
+</ul>
 
 <h4>Dependencies:</h4>
 <ul>
@@ -178,7 +175,7 @@ console.log(`Running on http://${HOST}:${PORT}`);
 <hr>
 
 <h3>CI/CD Pipeline</h3>
-<h4>1. GitHub Actions Workflow for Continuous Deployment</h4>
+<h4>GitHub Actions Workflow for Continuous Deployment</h4>
 <p>This workflow automates building, testing, and deploying a Dockerized application to Amazon ECS. It consists of two main jobs: one for building the Docker image and pushing it to Amazon ECR, and the other for deploying the application to the ECS cluster in both development and production environments.</p>
 
 <h4>AWS ECR (Elastic Container Registry):</h4>
@@ -192,7 +189,7 @@ Networking Components
 VPC with Public Subnets: Each cluster resides inside a Virtual Private Cloud (VPC) with public-facing subnets.
 Security Groups: Allow inbound HTTP traffic on port 8080 and permit all outbound traffic.
 
-<h4>ci-cd.yml Workflow File</h4>
+<h3>ci-cd.yml Workflow File</h3>
 <p><strong>Trigger:</strong> The workflow is triggered manually (<code>workflow_dispatch</code>), allowing for on-demand deployments.</p>
 <p><strong>Environment Variables:</strong> Set for easier reuse of names and identifiers like container names, regions, and repository names.</p>
 
@@ -233,26 +230,37 @@ Security Groups: Allow inbound HTTP traffic on port 8080 and permit all outbound
 <h3>Terraform for AWS (ECS) Infrastructure</h3>
 <p>Terraform is used to provision and configure AWS infrastructure for the ECS service. The environment folders (<strong>dev/infra</strong> and <strong>prod/infra</strong>) contain configuration files to set up ECS clusters, security groups, and ECS services.</p>
 
-<h4>Key AWS Resources by Terraform:</h4>
+<h4>Key AWS (ECS) Resources by Terraform:</h4>
 <ul>
     <li>AWS ECS Cluster</li>
     <li>AWS ECS Task Definitions</li>
     <li>AWS ECS Services</li>
     <li>Security Groups</li>
 </ul>
-Outputs:
+<hr>
+<h3>Output Samples:</h3>
+
+<h3>Github Workflow - Waiting for approval before deploying to production environment</h3>
 <img width="465" alt="image" src="https://github.com/user-attachments/assets/0f3f5d5b-e753-451b-b57f-1a184e06043c">
-<img width="466" alt="image" src="https://github.com/user-attachments/assets/30fb60a3-1a99-4e77-8249-dfe5cbc9cb70">
+<hr>
+<h3>Github Workflow - After deployed to production environment:</h3>
+<img width="465" alt="image" src="https://github.com/user-attachments/assets/30fb60a3-1a99-4e77-8249-dfe5cbc9cb70">
 
-Images stored on ECR:
+<hr>
 
-![alt text](image-1.png)
+<h3>In Console - Images stored on ECR</h3>
+<img src="image-1.png" alt="Images stored on ECR" />
 
-Dev and Prod Clusters in ECS:
-![alt text](image-2.png)
+<hr>
 
-This will expose the application, allowing to access it at http://localhost:8080 in a web browser.
-![alt text](image-3.png)
+<h3>In Console - ECS Clusters in development and production environments</h3>
+<img src="image-2.png" alt="Dev and Prod Clusters in ECS" />
+
+<hr>
+
+<h3>Application Access</h3>
+<p>Once the application is successfully deployed, it can be accessed locally at <strong>http://localhost:8080</strong> in a web browser.</p>
+<img width="539" alt="Application Access" src="https://github.com/user-attachments/assets/5609e39f-7f7b-459d-b6fb-23ee7e86862f">
 
 <hr>
 
