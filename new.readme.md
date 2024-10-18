@@ -201,18 +201,57 @@ console.log(`Running on http://${HOST}:${PORT}`);</code></pre>
             </li>
         </ul>
     </li>
-    <li><strong>deploy-dev and deploy-prod</strong>: These jobs deploy the application to their respective environments using the latest Docker image.
-        <ul>
-            <li><strong>Steps</strong>:
-                <ol>
-                    <li>Checkout the code.</li>
-                    <li>Retrieve the Docker image from Amazon ECR.</li>
-                    <li>Update the ECS service to use the latest Docker image.</li>
-                </ol>
-            </li>
-        </ul>
-    </li>
+    <li><strong>deploy-dev and deploy-prod</strong>: 
+<p>These jobs deploy the Docker image to ECS for the dev and prod environments, respectively.</p>
+
+<h3>Steps:</h3>
+<ol>
+    <li>Download the image information artifact.</li>
+    <li>Output the image URL.</li>
+    <li>Retrieve the ECS task definition.</li>
+    <li>Update the task definition with the new Docker image.</li>
+    <li>Deploy the updated task definition to ECS.</li>
+</ol>
+
+<h3>Deployment Conditions:</h3>
+<ul>
+    <li>For production deployment, the job runs after a successful dev deployment.</li>
+    <li>The task definitions for ECS services (<strong>web-dev</strong> and <strong>web-prod</strong>) are updated with the new image before deployment.</li>
 </ul>
+
+<h2>Terraform Infrastructure for ECS</h2>
+<p>Terraform is used to provision and configure AWS infrastructure for the ECS service. The environment folders (<strong>dev/infra</strong> and <strong>prod/infra</strong>) contain configuration files to set up ECS clusters, security groups, and ECS services.</p>
+
+<h3>Key Terraform Files:</h3>
+<ul>
+    <li><strong>provider.tf</strong>: Specifies the AWS provider and region.</li>
+    <li><strong>version.tf</strong>: Sets the required Terraform and AWS provider versions.</li>
+    <li><strong>main.tf</strong>: Contains the configuration for the ECS clusters, services, and task definitions.</li>
+</ul>
+
+<h2>Explanation of Branching Strategies</h2>
+
+<h3>Main Branch:</h3>
+<ul>
+    <li>The primary branch where stable code resides.</li>
+    <li>Represents the production-ready state of the application and should always be deployable.</li>
+    <li>All changes merged into the main branch should have undergone testing and code review processes to ensure quality.</li>
+    <li>Direct commits to the main branch are discouraged; feature branches should be created and merged via Pull Requests (PRs).</li>
+</ul>
+
+<h3>Feature Branch:</h3>
+<ul>
+    <li>Created to work on new features or bug fixes independently of the main codebase.</li>
+    <li>Each feature branch is typically created from the latest main branch and should have a descriptive name related to the feature being developed.</li>
+    <li>Once development is complete, a PR is created to merge the feature branch back into the main branch.</li>
+    <li>This strategy allows for collaborative development, enabling multiple developers to work on different features simultaneously without interference.</li>
+</ul>
+
+<h2>Workflow Diagram</h2>
+<p>Waiting for review to deploy to prod<br>After deployed to prod</p>
+
+<!-- Image added here as Base64 -->
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAIAAAB7GkOtAAAACXBIWXMAABcRAAAXEQHKJvM/AA..." alt="Workflow Diagram">
 
 ---
 
