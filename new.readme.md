@@ -1,11 +1,11 @@
-<h1>Capstone Project: CI/CD Pipeline for AWS ECS Deployment</h1>
+<h1>Capstone Project: CI/CD Pipeline for Web App Deployment on AWS ECS</h1>
 
 <h3>Project Team</h3>
 <ul>
     <li><strong>Jyoti</strong> Rani</li>
     <li><strong>Keren</strong> Priya</li>
-    <li><strong>Saravanan</strong> B</li>
-    <li>Vedarethinam <strong>Vennila</strong></li>
+    <li>Bakthavachalam<strong> Saravanan</strong></li>
+    <li>Vedarethinam<strong> Vennila</strong></li>
 </ul>
 <p>Students of PaCE@NTU enrolled in the SCTP Cloud Infrastructure Engineering course.</p>
 
@@ -13,24 +13,24 @@
 
 <h3>Project Overview</h3>
 <ul>
-    <li><strong>Project Name:</strong> Capstone ECS Deployment</li>
+    <li><strong>Project Name:</strong> CI/CD Pipeline for Web App Deployment on AWS ECS</li>
     <li><strong>Repository:</strong> GitHub Repository - https://github.com/Saravanannus/ce6-capstone-grp1</li>
 </ul>
-<p>This project automates the deployment of a Node.js application using Docker on Amazon ECS, utilizing GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD) and Terraform for infrastructure provisioning.</p>
+<p>This project automates the deployment of a Node.js application using Docker on Amazon ECS, utilizing GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD) and HCP Terraform for infrastructure provisioning.</p>
 
 <hr>
 
 <h3>Project Objectives</h3>
 <ul>
     <li>Implement a CI/CD pipeline using GitHub Actions for automated building, testing, and deployment of a Dockerized application to AWS ECS.</li>
-    <li>Provision and manage AWS infrastructure using Terraform, ensuring reliable and scalable application deployment.</li>
+    <li>Provision and manage AWS infrastructure using HCP Terraform, ensuring reliable and scalable application deployment.</li>
 </ul>
 
 <hr>
 
 <h3>Architecture Diagram</h3>
 <p>The architecture diagram below depicts the project's structure and interactions between components:</p>
-
+![alt text](image.png)
 <pre>
 +-------------------------------------+
 |          GitHub Repository          |
@@ -69,9 +69,27 @@
 
 <h3>Getting Started</h3>
 <h4>Tools and Technologies Used:</h4>
+## List of AWS Resources used in this Project: ##
+
+**1. GitHub Actions** – Automates the CI/CD pipeline for building, testing, and deploying the application.
+
+**2. IAM Roles and Policies** – Manages access and permissions for AWS resources between ECS and GitHub Actions, ensuring secure access.
+
+**3.** Infrastructure as Code (IaC):
+Terraform Cloud manages the infrastructure definitions for both environments.
+
+**4. Amazon ECR** – Stores Docker images for different environments (dev, stage, prod).
+
+**5. Amazon ECS Fargate** – Runs containerized services without managing infrastructure.
+
+**6. Security Group** – Manages network access, allowing HTTP traffic on port 8080.
+
+**7. VPC and Public Subnets** – Provides networking and connectivity for the ECS tasks.
+
+
 <h4>Dependencies:</h4>
 <ul>
-    <li>Node.js</li>
+    <li>index.js</li>
     <li>Express</li>
     <li>Jest (for testing)</li>
     <li>Docker</li>
@@ -105,13 +123,6 @@
 <h3>Project Development Details</h3>
 <h4>Steps Overview</h4>
 <ol>
-    <li><strong>Set Up GitHub Variables:</strong> Ensure that the following environment-specific variables are set in GitHub Repository Settings:
-        <ul>
-            <li>ECR_REPOSITORY (for both dev and prod)</li>
-            <li>ECS_SERVICE (for both dev and prod)</li>
-            <li>ECS_CLUSTER (for both dev and prod)</li>
-            <li>AWS_REGION (for both dev and prod)</li>
-        </ul>
     </li>
     <li><strong>Set up AWS credentials globally in GitHub Secrets:</strong>
         <ul>
@@ -119,6 +130,13 @@
             <li>AWS_SECRET_ACCESS_KEY</li>
         </ul>
     </li>
+    <li><strong>Set Up GitHub Variables:</strong> Ensure that the following environment-specific variables are set in GitHub Repository Settings:
+        <ul>
+            <li>ECR_REPOSITORY (for both dev and prod)</li>
+            <li>ECS_SERVICE (for both dev and prod)</li>
+            <li>ECS_CLUSTER (for both dev and prod)</li>
+            <li>AWS_REGION (for both dev and prod)</li>
+        </ul>
     <li><strong>Push Changes and Merge Feature Branch into Main:</strong>
         <ul>
             <li>Develop the feature in a feature branch and push the changes.</li>
