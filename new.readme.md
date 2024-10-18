@@ -14,7 +14,7 @@
 <h3>Project Overview</h3>
 <ul>
     <li><strong>Project Name:</strong> Capstone ECS Deployment</li>
-    <li><strong>Repository:</strong> GitHub Repository</li>
+    <li><strong>Repository:</strong> GitHub Repository - https://github.com/Saravanannus/ce6-capstone-grp1</li>
 </ul>
 <p>This project automates the deployment of a Node.js application using Docker on Amazon ECS, utilizing GitHub Actions for Continuous Integration and Continuous Deployment (CI/CD) and Terraform for infrastructure provisioning.</p>
 
