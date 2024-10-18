@@ -7,7 +7,7 @@ This project automates deployments using GitHub Actions and Terraform. The pipel
 - Jyoti Rani
 - Kerenp
 - Saravanan.B
-- VVenila
+- Vedrethinam Vennila
 
 # Architecture Diagram
 
