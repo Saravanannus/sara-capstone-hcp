@@ -85,7 +85,7 @@
 **3.** Infrastructure as Code (IaC):
 Terraform Cloud manages the infrastructure definitions for both environments.
 
-**4. Amazon ECR** – Stores Docker images for different environments (dev, stage, prod).
+**4. Amazon ECR** – Stores Docker images for different environments (dev, prod).
 
 **5. Amazon ECS Fargate** – Runs containerized services without managing infrastructure.
 
@@ -217,6 +217,13 @@ console.log(`Running on http://${HOST}:${PORT}`);
 <p>Purpose: Stores Docker images that are tagged with version identifiers such as latest or specific commit SHAs (e.g., :abc123).</p>
 <p>Integration: GitHub Actions authenticates with ECR and pushes images to designated repositories based on the environment (dev or prod).</p>
 
+AWS Fargate Tasks & Services
+ECS services run containerized applications inside Fargate tasks, each exposed on port 8080.
+
+Networking Components
+VPC with Public Subnets: Each cluster resides inside a Virtual Private Cloud (VPC) with public-facing subnets.
+Security Groups: Allow inbound HTTP traffic on port 8080 and permit all outbound traffic.
+
 <h4>ci-cd.yml Workflow File</h4>
 <p><strong>Trigger:</strong> The workflow is triggered manually (<code>workflow_dispatch</code>), allowing for on-demand deployments.</p>
 <p><strong>Environment Variables:</strong> Set for easier reuse of names and identifiers like container names, regions, and repository names.</p>
@@ -227,6 +234,7 @@ console.log(`Running on http://${HOST}:${PORT}`);
         <ul>
             <li><strong>Steps:</strong>
                 <ol>
+                    <li>Clone the Repository.</li>
                     <li>Checkout the code.</li>
                     <li>Install dependencies (Node.js and npm).</li>
                     <li>Run tests with <code>npm test</code>.</li>
@@ -254,22 +262,31 @@ console.log(`Running on http://${HOST}:${PORT}`);
 
 <hr>
 
-<h3>Terraform Infrastructure for ECS</h3>
+<h3>Terraform for AWS (ECS) Infrastructure</h3>
 <p>Terraform is used to provision and configure AWS infrastructure for the ECS service. The environment folders (<strong>dev/infra</strong> and <strong>prod/infra</strong>) contain configuration files to set up ECS clusters, security groups, and ECS services.</p>
 
-<h4>Key Terraform Resources:</h4>
+<h4>Key AWS Resources by Terraform:</h4>
 <ul>
     <li>AWS ECS Cluster</li>
     <li>AWS ECS Task Definitions</li>
     <li>AWS ECS Services</li>
-    <li>AWS Elastic Load Balancer (if applicable)</li>
     <li>Security Groups</li>
 </ul>
+Outputs:
+Images stored on ECR:
+
+![alt text](image-1.png)
+
+Dev and Prod Clusters in ECS:
+![alt text](image-2.png)
+
+This will expose the application, allowing to access it at http://localhost:8080 in a web browser.
+![alt text](image-3.png)
 
 <hr>
 
 <h3>Conclusion</h3>
-<p>This capstone project showcases our ability to deploy an application using best practices in CI/CD automation, infrastructure-as-code with Terraform, and cloud service management with AWS ECS. We have successfully met the project objectives, and our implementation allows for future scaling and optimization.</p>
+<p>This capstone project showcases our ability to deploy an application using best practices in CI/CD automation, infrastructure-as-code with HCP Terraform, and cloud service management with AWS ECS. We have successfully met the project objectives, and our implementation allows for future scaling and optimization.</p>
 
 </body>
 </html>

@@ -2,18 +2,6 @@
 ### Architecture Flow for ECS with GitHub Actions CI/CD
 
 
-#### 4. AWS Fargate Tasks & Services
-
-ECS services run **Node.js containers** inside **Fargate tasks.**
-
-Each service is exposed on **port 8080.**
-
-#### 5. Networking Components
-
-**VPC with Public Subnets:** Each cluster resides inside a Virtual Private Cloud (VPC) with public-facing subnets.
-
-**Security Groups:** Allow **inbound HTTP traffic on port 8080** and permit all outbound traffic.
-
 #### 6. Deployment Flow
 
 **Push to GitHub → Build Image → Push to ECR → Deploy to ECS (Dev or Prod)**
